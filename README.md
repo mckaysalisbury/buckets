@@ -2,7 +2,7 @@
 Usage
 ---
 
-I used Python 3. The code can run on python 2, with backports. Exercise left to the reader.
+I used Python 3, no requirements. The code can run on python 2, with backports. Exercise left to the reader.
 
     python main.py LEFT_BUCKET_SIZE RIGHT_BUCKET_SIZE TARGET_SIZE
 
