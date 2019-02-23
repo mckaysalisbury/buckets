@@ -29,3 +29,15 @@ def test_letters() -> None:
     assert 1 == main("1a", "2", "3")
     assert 1 == main("1", "a", "3")
     assert 1 == main("1", "2", "a3")
+
+
+def test_negative_bucket_sizes() -> None:
+    assert 1 == main("-1", "1", "1")
+    assert 1 == main("1", "-1", "1")
+    assert 1 == main("1", "-1", "-1")
+    assert 1 == main("-1", "-1", "-1")
+
+
+def test_negative_water_size() -> None:
+    assert 0 == main("0", "0", "-1")
+    assert 0 == main("10", "10", "-1")

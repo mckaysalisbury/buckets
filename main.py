@@ -5,7 +5,9 @@ from typing import List
 import solver
 from type_aliases import BucketValueType
 
-def usage() -> int:
+
+def usage(arg: str) -> int:
+    print(arg)
     print("USAGE: python solver.py LEFT_BUCKET_SIZE RIGHT_BUCKET_SIZE [TARGET_SIZE]")
     return 1
     
@@ -16,8 +18,10 @@ def main(*args: str) -> int:
         try:
             args_to_pass = [BucketValueType(arg) for arg in args]
         except (ValueError, decimal.InvalidOperation):  # decimal throws a different conversion error than int and float
-            print("Arguments must be numbers")
-            return usage()
+            return usage("Arguments must be numbers")
+
+        if any(arg < 0 for arg in args_to_pass[:2]):  # The first two arguments must not be negative
+            return usage("Bucket sizes must be positive")
 
         try:
             actions, location = solver.solve(*args_to_pass)
@@ -31,8 +35,7 @@ def main(*args: str) -> int:
             print(f"Perhaps try one of: {ex.valid}")
             # return 1  # I'm tempted to say this might be a failure case, but this is part of its job, which it did successfully
     else:
-        print("Incorrect number of arguments")
-        return usage()
+        return usage("Incorrect number of arguments")
 
     return 0  # 0 is success code for command line
 
