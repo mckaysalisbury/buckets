@@ -21,7 +21,7 @@ Running Tests
 Todo
 ---
 
-* I should output the result of each step of the way for debugging purposes
+* I'd like to support only passing two arguments
 * I'd like to clean up the mypy for `decimal` type, but `int` and `float` are clean for mypy, and I want to get to sleep.
 * There's probably some logic involving GCD to make impossible target sizes detect easier, but that's not part of the requirements, and doing it this way, we get some fun information
 * I really want to output a DOT graph for visualization, but that'll have to wait for another day.

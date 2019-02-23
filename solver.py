@@ -16,7 +16,7 @@ class UnsolvableError(Exception):
 all_actions = [Action(action, target) for action in BaseAction for target in Target]
 
 
-def solve(max_left: BucketValueType, max_right: BucketValueType, target_amount: BucketValueType) -> Tuple[List[Action], Target]:
+def solve(max_left: BucketValueType, max_right: BucketValueType, target_amount: BucketValueType) -> Tuple[List[Tuple[Action, BucketFilledState]], Target]:
     """Returns the list of actions, and a bucket which contains the correct amount"""
     actions_to_consider : Deque[Tuple[Action, BucketFilledState]] = collections.deque()  # for breadth first traversal
     graph: Dict[BucketFilledState, Optional[Tuple[Action, BucketFilledState]]] = {}
@@ -56,14 +56,15 @@ def solve(max_left: BucketValueType, max_right: BucketValueType, target_amount: 
             # break out early if you found a solution
             found = done(result_of_action)
             if found:
-                current = result_of_action
-                path: List[Action] = []
+                current_bucket_state = result_of_action
+                path: List[Tuple[Action, BucketFilledState]] = []
                 while True:
-                    node = graph[current]
+                    node = graph[current_bucket_state]
                     if node is None:
                         return path, found
-                    action, current = node
-                    path.insert(0, action)
+                    action, next_bucket_state = node
+                    path.insert(0, (action, current_bucket_state))
+                    current_bucket_state = next_bucket_state
 
             put_all(result_of_action)
 

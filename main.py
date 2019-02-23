@@ -27,12 +27,12 @@ def main(*args: str) -> int:
             actions, location = solver.solve(*args_to_pass)
 
             print("Steps:")            
-            for index, action in enumerate(actions):
-                print(f"{index + 1}. {action}")
+            for index, (action, state) in enumerate(actions):
+                print(f"{index + 1}. {action} (bucket state will be {state[0]}, {state[1]})")
             print(f"The target amount will be in the {location.name} bucket")
         except solver.UnsolvableError as ex:
             print("No Solution")
-            print(f"Perhaps try one of: {ex.valid}")
+            print(f"Perhaps try one of these:", *ex.valid)
             # return 1  # I'm tempted to say this might be a failure case, but this is part of its job, which it did successfully
     else:
         return usage("Incorrect number of arguments")
