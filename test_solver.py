@@ -5,7 +5,7 @@ import pytest
 from action import Action
 from enums import BaseAction, Target
 import solver
-from type_aliases import BucketFilledState
+from type_aliases import BucketFilledState, BucketValueType
 
 
 def to_tuples(actions: List[Tuple[Action, BucketFilledState]], target: Target) -> Tuple[List[Tuple[BaseAction, Target, BucketFilledState]], Target]:
@@ -36,11 +36,11 @@ def test_532() -> None:
     ], Target.Left) == to_tuples(*solver.solve(5, 3, 2))
 
 
-# def test_one_and_half() -> None:
-#     assert ([
-#         (solver.BaseAction.Fill, solver.Target.Left, (2, 0)),
-#         (solver.BaseAction.Transfer, solver.Target.Right, (1.5, 0.5)),
-#     ], Target.Left) == to_tuples(*solver.solve(2, 0.5, 1.5))
+def test_one_and_half() -> None:
+    assert ([
+        (solver.BaseAction.Fill, solver.Target.Left, (2, 0)),
+        (solver.BaseAction.Transfer, solver.Target.Right, (1.5, 0.5)),
+    ], Target.Left) == to_tuples(*solver.solve(2, BucketValueType(0.5), BucketValueType(1.5)))
 
 
 def test_534() -> None:
@@ -52,3 +52,8 @@ def test_534() -> None:
         (BaseAction.Fill, Target.Left, (5, 2)),
         (BaseAction.Transfer, Target.Right, (4, 3)),
     ], Target.Left) == to_tuples(*solver.solve(5, 3, 4))
+
+
+def test_53() -> None:
+    with pytest.raises(solver.UnsolvableError):
+        solver.solve(5, 3)

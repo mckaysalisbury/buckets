@@ -41,3 +41,15 @@ def test_negative_bucket_sizes() -> None:
 def test_negative_water_size() -> None:
     assert 0 == main("0", "0", "-1")
     assert 0 == main("10", "10", "-1")
+
+
+def test_bad_args() -> None:
+    assert 1 == main()
+    assert 1 == main("1")
+    assert 1 == main("a")
+    assert 1 == main("1", "2", "3", "4")
+    assert 1 == main("1", "2", "3", "4", "5")
+
+
+def test_two_args() -> None:
+    assert 0 == main("5", "3")

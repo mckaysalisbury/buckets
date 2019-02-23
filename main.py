@@ -14,7 +14,7 @@ def usage(arg: str) -> int:
 
 def main(*args: str) -> int:
 
-    if len(args) == 3:
+    if len(args) in [2, 3]:
         try:
             args_to_pass = [BucketValueType(arg) for arg in args]
         except (ValueError, decimal.InvalidOperation):  # decimal throws a different conversion error than int and float
@@ -32,7 +32,7 @@ def main(*args: str) -> int:
             print(f"The target amount will be in the {location.name} bucket")
         except solver.UnsolvableError as ex:
             print("No Solution")
-            print(f"Perhaps try one of these:", *ex.valid)
+            print(f"Perhaps try one of these:", *sorted(ex.valid))
             # return 1  # I'm tempted to say this might be a failure case, but this is part of its job, which it did successfully
     else:
         return usage("Incorrect number of arguments")
