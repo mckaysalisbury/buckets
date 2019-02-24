@@ -53,3 +53,13 @@ def test_bad_args() -> None:
 
 def test_two_args() -> None:
     assert 0 == main("5", "3")
+
+
+def test_strange_options() -> None:
+    assert 1 == main("--what")
+    assert 1 == main("5", "3", "--what")
+    assert 1 == main("5", "3", "4", "--what")
+
+
+def test_graph() -> None:
+    assert 0 == main("5", "3", "--graph")

@@ -4,7 +4,7 @@ from typing import Callable, Dict, List, Optional, Tuple, Deque, Set
 from performer import get_performer
 from action import Action
 from enums import BaseAction, Target
-from type_aliases import BucketFilledState, BucketValueType
+from type_aliases import BucketFilledState, BucketValueType, Graph
 
 
 class UnsolvableError(Exception):
@@ -55,10 +55,10 @@ def solve(max_left: BucketValueType, max_right: BucketValueType, target_amount: 
     raise UnsolvableError(valid)
 
 
-def generate_graph(max_left: BucketValueType, max_right: BucketValueType, break_out_early: Callable[[BucketFilledState], bool] = lambda _: False) -> Dict[BucketFilledState, Optional[Tuple[Action, BucketFilledState]]]:
+def generate_graph(max_left: BucketValueType, max_right: BucketValueType, break_out_early: Callable[[BucketFilledState], bool] = lambda _: False) -> Graph:
     """Generates a whole graph"""
     actions_to_consider : Deque[Tuple[Action, BucketFilledState]] = collections.deque()  # for breadth first traversal
-    graph: Dict[BucketFilledState, Optional[Tuple[Action, BucketFilledState]]] = {}
+    graph: Graph = {}
 
     def put_all(current: BucketFilledState) -> None:
         for action in all_actions:

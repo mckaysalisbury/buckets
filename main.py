@@ -2,6 +2,7 @@ import decimal
 import sys
 from typing import List
 
+import dot
 import solver
 from type_aliases import BucketValueType
 
@@ -12,7 +13,12 @@ def usage(arg: str) -> int:
     return 1
     
 
-def main(*args: str) -> int:
+def main(*args_tuple: str) -> int:
+    args = list(args_tuple)
+    graph_option = '--graph'
+    requested_graph = graph_option in args
+    if requested_graph:
+        args.remove(graph_option)
 
     if len(args) in [2, 3]:
         try:
@@ -23,10 +29,17 @@ def main(*args: str) -> int:
         if any(arg < 0 for arg in args_to_pass[:2]):  # The first two arguments must not be negative
             return usage("Bucket sizes must be positive")
 
+        if requested_graph:
+            graph = solver.generate_graph(args_to_pass[0], args_to_pass[1])
+            result = dot.to_dot(graph)
+            print(result)
+            # TODO: highlight based on args_to_pass[2]
+            return 0  # success
+
         try:
             actions, location = solver.solve(*args_to_pass)
 
-            print("Steps:")            
+            print("Steps:")
             for index, (action, state) in enumerate(actions):
                 print(f"{index + 1}. {action} (bucket state will be {state[0]}, {state[1]})")
             print(f"The target amount will be in the {location.name} bucket")
