@@ -1,3 +1,4 @@
+"""Tests the solver functionality"""
 from typing import List, Tuple, Union
 
 import pytest
@@ -7,12 +8,19 @@ from enums import BaseAction, Target
 import solver
 from type_aliases import BucketFilledState, BucketValueType
 
+# pylint: disable=missing-docstring  # Test file
 
-def to_tuples(actions: List[Tuple[Action, BucketFilledState]], target: Target) -> Tuple[List[Tuple[BaseAction, Target, BucketFilledState]], Target]:
+
+def to_tuples(
+        actions: List[Tuple[Action, BucketFilledState]],
+        target: Target
+    ) -> Tuple[List[Tuple[BaseAction, Target, BucketFilledState]], Target]:
     return [(action.base, action.target, current) for action, current in actions], target
 
 
-def _solve(*args: Union[float, int]) -> Tuple[List[Tuple[BaseAction, Target, BucketFilledState]], Target]:
+def _solve(
+        *args: Union[float, int]
+    ) -> Tuple[List[Tuple[BaseAction, Target, BucketFilledState]], Target]:
     """This is a wrapper around the solve function, which does two things:
     1. Returns a simpler set of objects for return type comparison
     2. Accepts ints for easier mypy type checking
@@ -29,8 +37,12 @@ def test_empty() -> None:
 
 
 def test_simple_fill() -> None:
-    assert ([(solver.BaseAction.Fill, solver.Target.Left, (1, 0))], Target.Left) == _solve(1, 5, 1)
-    assert ([(solver.BaseAction.Fill, solver.Target.Right, (0, 5))], Target.Right) == _solve(1, 5, 5)
+    assert (
+        [(solver.BaseAction.Fill, solver.Target.Left, (1, 0))],
+        Target.Left) == _solve(1, 5, 1)
+    assert (
+        [(solver.BaseAction.Fill, solver.Target.Right, (0, 5))],
+        Target.Right) == _solve(1, 5, 5)
 
 
 def assert_impossible() -> None:

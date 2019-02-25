@@ -1,19 +1,25 @@
-from typing import Union, Callable, Tuple
+"""Tests the `perform` function (which performs the actions)"""
+from typing import Callable, Tuple
 
 from action import Action
 from enums import BaseAction, Target
 from performer import get_performer
 from type_aliases import BucketValueType, BucketFilledState
 
+# pylint: disable=missing-docstring  # Test file
 
-def _wrap_performer(left: int, right: int) -> Callable[[Action, Tuple[int, int]], BucketFilledState]:
+
+def _wrap_performer(
+        left: int,
+        right: int
+    ) -> Callable[[Action, Tuple[int, int]], BucketFilledState]:
     """
     This function wraps the existing behavior so that it passes mypy.
     It is designed to be a drop in place replacement for get_performer
     """
     performer = get_performer(BucketValueType(left), BucketValueType(right))
-    def wrapper(action: Action, input: Tuple[int, int]) -> BucketFilledState:
-        return performer(action, (BucketValueType(input[0]), BucketValueType(input[1])))
+    def wrapper(action: Action, input_state: Tuple[int, int]) -> BucketFilledState:
+        return performer(action, (BucketValueType(input_state[0]), BucketValueType(input_state[1])))
     return wrapper
 
 

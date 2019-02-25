@@ -1,4 +1,5 @@
-from type_aliases import BucketFilledState, BucketValueType, Graph
+"""Turns graphs into dot files aka graphviz"""
+from type_aliases import BucketFilledState, Graph
 
 from action import Action
 
@@ -19,8 +20,8 @@ def _link_row(state: BucketFilledState, action: Action, parent: BucketFilledStat
     return f'{_name(parent)} -> {_name(state)}'
 
 
-def to_dot(graph: Graph) -> str: 
-    basis_case = (BucketValueType(0), BucketValueType(0))
+def to_dot(graph: Graph) -> str:
+    """Converts a bucket graph into a DOT graph"""
 
     return f"""
 digraph steps {{
@@ -29,4 +30,3 @@ digraph steps {{
     {r'''
     '''.join(_link_row(state, *value) for state, value in graph.items() if value)}
 }}"""
-

@@ -21,6 +21,8 @@ I used Python 3, no requirements. The code could be run on python 2, with backpo
 
     mypy main.py solver.py performer.py enums.py --strict
 
+    pylint *.py
+
 # Todo
 
 * Label the edges of the graph with the action to take to get there

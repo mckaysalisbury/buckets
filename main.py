@@ -1,6 +1,6 @@
+"""The main function. In charge of the Console UI / IO"""
 import decimal
 import sys
-from typing import List
 
 import dot
 import solver
@@ -8,12 +8,14 @@ from type_aliases import BucketValueType
 
 
 def usage(arg: str) -> int:
+    """Prints the usage, and returns the error code"""
     print(arg)
     print("USAGE: python solver.py LEFT_BUCKET_SIZE RIGHT_BUCKET_SIZE [TARGET_SIZE]")
-    return 1
-    
+    return 1  # failure code for command line
+
 
 def main(*args_tuple: str) -> int:
+    """The main console application, as a testable function"""
     args = list(args_tuple)
     graph_option = '--graph'
     requested_graph = graph_option in args
@@ -23,7 +25,7 @@ def main(*args_tuple: str) -> int:
     if len(args) in [2, 3]:
         try:
             args_to_pass = [BucketValueType(arg) for arg in args]
-        except (ValueError, decimal.InvalidOperation):  # decimal throws a different conversion error than int and float
+        except (ValueError, decimal.InvalidOperation):  # support both conversion errors
             return usage("Arguments must be numbers")
 
         if any(arg < 0 for arg in args_to_pass[:2]):  # The first two arguments must not be negative
@@ -46,7 +48,6 @@ def main(*args_tuple: str) -> int:
         except solver.UnsolvableError as ex:
             print("No Solution")
             print(f"Perhaps try one of these:", *sorted(ex.valid))
-            # return 1  # I'm tempted to say this might be a failure case, but this is part of its job, which it did successfully
     else:
         return usage("Incorrect number of arguments")
 
@@ -54,6 +55,6 @@ def main(*args_tuple: str) -> int:
 
 
 if __name__ == '__main__':
-    args = sys.argv
-    args.pop(0)
-    sys.exit(main(*args))
+    ARGS = sys.argv
+    ARGS.pop(0)
+    sys.exit(main(*ARGS))
