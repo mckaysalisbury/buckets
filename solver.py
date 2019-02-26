@@ -21,7 +21,9 @@ ALL_ACTIONS = [Action(action, target) for action in BaseAction for target in Tar
 
 def solve(
         max_left: BucketValueType, max_right: BucketValueType,
-        target_amount: Optional[BucketValueType] = BucketValueType(-1)
+        target_amount: Optional[BucketValueType] = BucketValueType(-1),
+        *,
+        include_back_edges: bool,
     ) -> Tuple[List[Tuple[Action, BucketFilledState]], Target]:
     """Returns the list of actions, and a bucket which contains the correct amount"""
 
@@ -42,6 +44,7 @@ def solve(
             return True
         return False
 
+    # TODO: honor include_back_edges
     graph = generate_graph(max_left, max_right, break_out_early)
 
     if found_state and direction:

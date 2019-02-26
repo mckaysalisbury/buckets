@@ -19,14 +19,18 @@ def to_tuples(
 
 
 def _solve(
-        *args: Union[float, int]
+        *args: Union[float, int],
+        include_back_edges: bool = False,
     ) -> Tuple[List[Tuple[BaseAction, Target, BucketFilledState]], Target]:
     """This is a wrapper around the solve function, which does two things:
     1. Returns a simpler set of objects for return type comparison
     2. Accepts ints for easier mypy type checking
     Both of these things are optional, but it makes writing and updating the tests better
     """
-    return to_tuples(*solver.solve(*[BucketValueType(arg) for arg in args]))
+    return to_tuples(
+        *solver.solve(
+            *[BucketValueType(arg) for arg in args],
+            include_back_edges=include_back_edges))
 
 
 def test_empty() -> None:

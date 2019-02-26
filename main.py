@@ -1,4 +1,5 @@
 """The main function. In charge of the Console UI / IO"""
+from argparse import ArgumentParser, ArgumentTypeError
 import decimal
 import sys
 
@@ -7,54 +8,51 @@ import solver
 from type_aliases import BucketValueType
 
 
-def usage(arg: str) -> int:
-    """Prints the usage, and returns the error code"""
-    print(arg)
-    print("USAGE: python solver.py LEFT_BUCKET_SIZE RIGHT_BUCKET_SIZE [TARGET_SIZE] [--graph]")
-    return 1  # failure code for command line
+def _bucket_value_parser(arg: str) -> BucketValueType:
+    try:
+        return BucketValueType(arg)
+    except (ValueError, decimal.InvalidOperation):  # support both conversion errors
+        raise ArgumentTypeError("must be a number")
 
 
-def main(*args_tuple: str) -> int:
+def _non_negative_bucket_value_parser(arg: str) -> BucketValueType:
+    value = _bucket_value_parser(arg)
+    if value < 0:
+        raise ArgumentTypeError("must not be negative")
+    return value
+
+
+def main() -> int:
     """The main console application, as a testable function"""
-    args = list(args_tuple)
-    graph_option = '--graph'
-    requested_graph = graph_option in args
-    if requested_graph:
-        args.remove(graph_option)
 
-    if len(args) in [2, 3]:
-        try:
-            args_to_pass = [BucketValueType(arg) for arg in args]
-        except (ValueError, decimal.InvalidOperation):  # support both conversion errors
-            return usage("Arguments must be numbers")
+    parser = ArgumentParser()
+    parser.add_argument('left', type=_non_negative_bucket_value_parser)
+    parser.add_argument('right', type=_non_negative_bucket_value_parser)
+    parser.add_argument('target', nargs='?', type=_bucket_value_parser, default=-1)
+    parser.add_argument('--graph', action='store_true')
+    parser.add_argument('--verbose', action='store_true')
+    args = parser.parse_args()
 
-        if any(arg < 0 for arg in args_to_pass[:2]):  # The first two arguments must not be negative
-            return usage("Bucket sizes must be positive")
+    if args.graph:
+        graph = solver.generate_graph(args.left, args.right)
+        result = dot.to_dot(graph, args.target)
+        print(result)
+        return 0  # success
 
-        if requested_graph:
-            target = args_to_pass[2] if len(args_to_pass) > 2 else BucketValueType(-1)
-            graph = solver.generate_graph(args_to_pass[0], args_to_pass[1])
-            result = dot.to_dot(graph, target)
-            print(result)
-            return 0  # success
+    try:
+        actions, location = solver.solve(
+            args.left, args.right, args.target, include_back_edges=args.verbose)
 
-        try:
-            actions, location = solver.solve(*args_to_pass)
-
-            print("Steps:")
-            for index, (action, state) in enumerate(actions):
-                print(f"{index + 1}. {action} (bucket state will be {state[0]}, {state[1]})")
-            print(f"The target amount will be in the {location.name} bucket")
-        except solver.UnsolvableError as ex:
-            print("No Solution")
-            print(f"Perhaps try one of these:", *sorted(ex.valid))
-    else:
-        return usage("Incorrect number of arguments")
+        print("Steps:")
+        for index, (action, state) in enumerate(actions):
+            print(f"{index + 1}. {action} (bucket state will be {state[0]}, {state[1]})")
+        print(f"The target amount will be in the {location.name} bucket")
+    except solver.UnsolvableError as ex:
+        print("No Solution")
+        print(f"Perhaps try one of these:", *sorted(ex.valid))
 
     return 0  # 0 is success code for command line
 
 
 if __name__ == '__main__':
-    ARGS = sys.argv
-    ARGS.pop(0)
-    sys.exit(main(*ARGS))
+    sys.exit(main())
