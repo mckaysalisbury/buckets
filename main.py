@@ -10,7 +10,7 @@ from type_aliases import BucketValueType
 def usage(arg: str) -> int:
     """Prints the usage, and returns the error code"""
     print(arg)
-    print("USAGE: python solver.py LEFT_BUCKET_SIZE RIGHT_BUCKET_SIZE [TARGET_SIZE]")
+    print("USAGE: python solver.py LEFT_BUCKET_SIZE RIGHT_BUCKET_SIZE [TARGET_SIZE] [--graph]")
     return 1  # failure code for command line
 
 
@@ -32,10 +32,10 @@ def main(*args_tuple: str) -> int:
             return usage("Bucket sizes must be positive")
 
         if requested_graph:
+            target = args_to_pass[2] if len(args_to_pass) > 2 else BucketValueType(-1)
             graph = solver.generate_graph(args_to_pass[0], args_to_pass[1])
-            result = dot.to_dot(graph)
+            result = dot.to_dot(graph, target)
             print(result)
-            # TODO: highlight based on args_to_pass[2]
             return 0  # success
 
         try:

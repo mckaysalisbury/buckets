@@ -18,3 +18,12 @@ digraph steps {
     l0r1 [label="(0, 1)"]
     l0r0 -> l0r1 [label="Fill Right"]
 }"""
+
+
+def test_011() -> None:
+    assert to_dot(generate_graph(BucketValueType(0), BucketValueType(1)), BucketValueType(1)) == """
+digraph steps {
+    l0r0 [label="(0, 0)"]
+    l0r1 [label="(0, 1)"][style=filled, fillcolor=lightgreen]
+    l0r0 -> l0r1 [label="Fill Right"]
+}"""
