@@ -25,7 +25,6 @@ I used Python 3, no requirements. The code could be run on python 2, with backpo
 
 # Todo
 
-* Label the edges of the graph with the action to take to get there
 * Highlight the target option(s) for graph visualization
 * I also want to fully roll up the solving loop, as there's a teeny amount of duplication in setup, but again, sleep.
 * There's probably some logic involving GCD to make impossible target sizes detect easier, but that's not part of the requirements, and doing it this way, we get some helpful information to the user.

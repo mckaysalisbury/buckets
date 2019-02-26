@@ -8,16 +8,20 @@ def _name(state: BucketFilledState) -> str:
     return f'l{state[0]}r{state[1]}'
 
 
-def _label(state: BucketFilledState) -> str:
+def _state_label(state: BucketFilledState) -> str:
     return f'({state[0]}, {state[1]})'
 
 
+def _link_label(action: Action) -> str:
+    return f'{action.base.name} {action.target.name}'
+
+
 def _state_row(state: BucketFilledState) -> str:
-    return f'{_name(state)} [label="{_label(state)}"]'
+    return f'{_name(state)} [label="{_state_label(state)}"]'
 
 
 def _link_row(state: BucketFilledState, action: Action, parent: BucketFilledState) -> str:
-    return f'{_name(parent)} -> {_name(state)}'
+    return f'{_name(parent)} -> {_name(state)} [label="{_link_label(action)}"]'
 
 
 def to_dot(graph: Graph) -> str:
