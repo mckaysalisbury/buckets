@@ -33,5 +33,6 @@ Creates a DOT graph of the state tree for buckets of size 7 and 5 highlighting t
 
 # Todo
 
+* Show back edges in the solving graph
 * I want to fully roll up the solving loop, as there's a teeny amount of duplication in setup.
 * There's probably some logic involving GCD to make impossible target sizes detect easier, but that's not part of the requirements, and doing it this way, we get some helpful information to the user.
